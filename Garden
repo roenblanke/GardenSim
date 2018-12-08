@@ -1,0 +1,88 @@
+package roen.pkgfinal;
+
+import java.util.Scanner;
+
+public class Garden {
+
+
+    public static int day = 0;
+    
+    public static void main(String[] args) {
+        Plant tree = new Plant();
+        tree.setName("Oak");
+
+        Plant flower = new Plant();
+        flower.setName("lily");
+
+        Plant shrub = new Plant();
+        shrub.setName("aloe");
+
+        while (true) {
+            gardenStatus(shrub, tree, flower);
+            System.out.println("How many days would you like to pass by?");
+            Scanner scan = new Scanner(System.in);
+            int input = scan.nextInt();
+            timeForAll(input, shrub, tree, flower);
+        }
+    }//close main method
+
+    public static void gardenStatus(Plant plant1, Plant plant2, Plant plant3) {
+        plant1.checkNutrientLevels();
+        plant2.checkNutrientLevels();
+        plant3.checkNutrientLevels();
+    }//close method
+
+    public static void timeForAll(int input, Plant plant1, Plant plant2, Plant plant3) {
+        passTime(input, plant1);
+        printPlantHeight(plant1);
+        passTime(input, plant2);
+        printPlantHeight(plant2);
+        passTime(input, plant3);
+        printPlantHeight(plant3);
+    }//close method
+
+    public static void passTime(int passTime, Plant plant) {
+        int futureDay = day + passTime;
+        while (day < futureDay) {
+            day = day + 1;
+            plant.passDay();
+        }
+    }//close method
+    
+    public static void printPlantHeight(Plant plant1){
+        System.out.println(plant1.getName() + " is " + plant1.getHeight() + "CM tall");
+    }//close method
+}//close class
+
+/* 
+POTENTIAL UI
+
+import java.util.Scanner;
+while (true) {
+            System.out.println("Welcome to your garden!");
+            System.out.println("_______________________");
+            System.out.println("Please select one of the following:");
+            System.out.println("1 - Plant a new plant");
+            System.out.println("2 - Water Plants");
+            System.out.println("3 - Turn lights on");
+            System.out.println("4 - Pass time");
+            System.out.println("5 - Check Garden Status");
+            System.out.println("_______________________");
+            Scanner scan = new Scanner(System.in);
+            int input = scan.nextInt();
+            if(input == 1){//honestly, don't remember how to do switches
+                //plant a new plant. I do not know how to make an object that stores all
+                //of my plant objects that I put into it.
+            } else if(input == 2){
+                //water
+            } else if(input == 3){
+                //lights
+            } else if(input == 4){
+                //time
+            } else if(input == 5){
+                //status
+            } else {
+                System.out.println("Please enter a valid input.");
+            }//close if else chain
+        }//close while
+ */
