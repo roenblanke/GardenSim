@@ -1,16 +1,22 @@
-package roen.pkgfinal;
+package pkgfinal;
 
 import java.util.Random;
 
 public class Plant {
 
+    //mem vars
+    private boolean isAlive = true;
     private String name;
+    private boolean isTree;
+    private boolean isFlower;
+    private int heightCM = 1;
+    private int maxHeightCM;
 
+    //these mem vars simulate the plant taking in nutrients for photosynthesis
     private int sugar = 1;
     private int cO2 = 0;
     private int h2O = 0;
     private int light = 0;
-    private double heightCM = 0.00;
 
     public void passDay() {
         Random rand1 = new Random();
@@ -27,7 +33,7 @@ public class Plant {
 
         grow();
     }//close method
-    
+
     public void photosynthesis() {
         while (cO2 >= 6 && h2O >= 6 && light > 0) {
             cO2 = cO2 - 6;
@@ -37,6 +43,54 @@ public class Plant {
             sugar = sugar + 1;
         }//close while
     }//close method
+
+    private void grow() {
+        if (sugar >= 2) {
+            sugar = sugar - 2;
+            heightCM = heightCM + 1;
+        }//close if
+        if (heightCM > maxHeightCM){
+            //In the garden class, we will check the isAlive status for each
+            //plant object and if it is false, then we will delete it. But what 
+            //I do not know is what will happen to the array. Will the array 
+            //shift everything down to fill in the gap? IDK
+            isAlive = false;
+        }
+    }//close method
+
+    public double getHeight() {
+        return heightCM;
+    }//close method
+
+    public void setName(String newName) {
+        name = newName;
+    }//close method
+
+    public String getName() {
+        return name;
+    }//close method
+
+    public void setType(String type) {
+        if ("tree".equals(type)) {
+            isTree = true;
+            isFlower = false;
+            Random rand1 = new Random();
+            maxHeightCM = rand1.nextInt(2500);
+        } else if ("flower".equals(type)) {
+            isTree = false;
+            isFlower = true;
+            Random rand2 = new Random();
+            maxHeightCM = rand2.nextInt(20);
+        }//close if else
+    }//close setType method
+
+    public boolean getTreeType() {
+        return isTree;
+    }//close getType method
+
+    public boolean getFlowerType() {
+        return isFlower;
+    }//close getType method
 
     public void checkNutrientLevels() {
         if (cO2 < 1 || h2O < 1 || light < 1) {
@@ -55,22 +109,4 @@ public class Plant {
         }//close if 
     }//close method
 
-    private void grow() {
-        if (sugar >= 2) {
-            sugar = sugar - 2;
-            heightCM = heightCM + .01;
-        }//close if
-    }//close method
-
-
-    public void setName(String newName) {
-        name = newName;
-    }//close method
-    public String getName(){
-        return name;
-    }//close method
-    
-    public double getHeight(){
-        return heightCM;
-    }//close method
 }//close class
