@@ -1,4 +1,4 @@
-package pkgfinal;
+package roen.pkgfinal;
 
 import java.util.Scanner;
 //in my final program I wanted to simulate a garden. In this garden I originally
@@ -90,7 +90,6 @@ public class Garden {
                     + "/tPlease type and enter your choice.");
             userInput = scan.next();
             pLant.setName(userInput);
-
         } else {
             System.out.println("Sorry, you already filled your garden! /p"
                     + "Wait for some to die, then come back later and plant "
@@ -111,7 +110,20 @@ public class Garden {
     }//close passTime method
 
     public void checkGardenStatus() {
-
+        System.out.println("* * * GARDEN STATUS * * *");
+        for(int n = 0; n < numPlants; n++){
+            String type; 
+            if(myPlantsInGarden[n].getFlowerType() && !myPlantsInGarden[n].getTreeType()){
+                type = "tree";
+            } else {
+                type = "flower";
+            }
+            System.out.println(Integer.toString(n + 1)  
+                    + ". " + myPlantsInGarden[n].getName()
+                    + "/pType..........................." + type
+                    + "/pHieght........................." + myPlantsInGarden[n].getHeight() + "cm"
+                    + "/p");
+        }
     }//close checkGardenStatus method
 
     public static void gardenStatus(Plant plant1, Plant plant2, Plant plant3) {
