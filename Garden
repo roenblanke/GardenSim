@@ -1,4 +1,4 @@
-package roen.pkgfinal;
+package javaapplication11;
 
 import java.util.Scanner;
 //in my final program I wanted to simulate a garden. In this garden I originally
@@ -6,7 +6,7 @@ import java.util.Scanner;
 //on their progress. I have not learned much about arrays thus far, but it 
 //seemed like the most appropriate way to be able to have a set of plants that I 
 //can add to and subtract from based on user input. My novice is apparent in 
-//this work but it is a beginner course, no? So this is my first crack at 
+//this work, but it is a beginner course. So this is my first crack at 
 //arrays! I hope you enjoy it and I thank you for being my professor.
 
 public class Garden {
@@ -17,17 +17,14 @@ public class Garden {
     //keep track of the day for the purposes of plant growth
     public static int day = 0;
 
+    //For the sake of simplicity we will have a max num of 1000 plants
+    static Plant myPlantsInGarden[];
+
     //this is the counter for how many plants we have currently planted
-    //this mem var will be useful for knowing where in the array to plant the 
-    //next plant and being able to display, as an integer, the number of plants  
-    //the user can still plant.
     public static int numPlants = 0;
 
-    //For the sake of simplicity we will have a max num of 1000 plants
-    Plant myPlantsInGarden[] = new Plant[MAX_PLANTS];
-
     public static void main(String[] args) {
-
+        myPlantsInGarden = new Plant[MAX_PLANTS];
         //After the user chooses an option, the program will execute that, then return 
         //to this home menu, since it is a while loop.
         while (true) {
@@ -69,88 +66,124 @@ public class Garden {
         }//close while
     }//close main method
 
-    public void newPlant() {
-        if (numPlants <= 0) {
+    public static void newPlant() {
+        if (numPlants <= MAX_PLANTS) {
             //instantiate a new plants object and then ask the user to personal
             //-ize it.
             Plant pLant = new Plant();
             myPlantsInGarden[numPlants] = pLant;
-
-            //of course trees can have flowers, but this is a simple project
-            //that could easily be expanded for depth and accuracy
-            System.out.println("Would you like to plant a flower or tree?"
-                    + "/tPlease type and enter your choice.");
-            //ask the user what kind of plant they want 
+            numPlants++;
+            //this while loop will prompt the user to enter the desired plant
+            //type until they enter flower or tree
             Scanner scan = new Scanner(System.in);
-            String userInput = scan.next();
-            //set pLant's type accordingly
-            pLant.setType(userInput.toLowerCase());
+            while (true) {
+                System.out.println("Would you like to plant a flower or tree?");
+                System.out.println("Please type and enter your choice.");
+                //ask the user what kind of plant they want 
+                String userInput = scan.next();
+                if ("tree".equals(userInput.toLowerCase()) || "flower".equals(userInput.toLowerCase())) {
+                    pLant.setType(userInput.toLowerCase());
+                    break;
+                } else {
+                    System.out.println("Please enter a valid type");
+                }//close if/else
+            }//close while
+
             //the user can name the plant
             System.out.println("What would you like to name your new plant?"
-                    + "/tPlease type and enter your choice.");
-            userInput = scan.next();
+                    + "\tPlease type and enter your choice.");
+            String userInput = scan.next();
             pLant.setName(userInput);
         } else {
-            System.out.println("Sorry, you already filled your garden! /p"
+            System.out.println("Sorry, you already filled your garden!"
                     + "Wait for some to die, then come back later and plant "
                     + "some more.");
         }//close if/else
     }//close Plant method
 
-    public void water() {
-
+    //this method will add water to each plant object in the array
+    public static void water() {
+        for (int n = 0; n < numPlants; n++) {
+            myPlantsInGarden[n].waterPlant();
+            if (myPlantsInGarden[n].getTypeBool()) {
+                if (myPlantsInGarden[n].getH2O() < 4) {
+                    System.out.println(myPlantsInGarden[n].getName()
+                            + " absorbed the water quickly, "
+                            + myPlantsInGarden[n].getHeight()
+                            + " may still be thirsty");
+                } else if (myPlantsInGarden[n].getH2O() < 6) {
+                    System.out.println(myPlantsInGarden[n].getName()
+                            + " absorbed the water slowly, "
+                            + myPlantsInGarden[n].getName()
+                            + " needs just a bit more water");
+                } else {
+                    System.out.println(myPlantsInGarden[n].getName()
+                            + " is full, any more and you will overflow the plant.");
+                }//close if else chain
+            } else {
+                if (myPlantsInGarden[n].getH2O() < 16) {
+                    System.out.println(myPlantsInGarden[n].getName()
+                            + " absorbed the water quickly, "
+                            + myPlantsInGarden[n].getHeight()
+                            + " may still be thirsty");
+                } else if (myPlantsInGarden[n].getH2O() < 24) {
+                    System.out.println(myPlantsInGarden[n].getName()
+                            + " absorbed the water slowly, "
+                            + myPlantsInGarden[n].getName()
+                            + " needs just a bit more water");
+                } else {
+                    System.out.println(myPlantsInGarden[n].getName()
+                            + " is full, any more and you will overflow the plant.");
+                }//close if else chain
+            }//close if else chain
+        }//close for loop
     }//close water method
 
-    public void lights() {
-
+    public static void lights() {
+        for (int n = 0; n < numPlants; n++) {
+            myPlantsInGarden[n].turnLightON();
+            System.out.println(myPlantsInGarden[n].getName()
+                    + " is now recieving light");
+        }//close for loop
     }//close lights method
 
-    public void passTime() {
-
+    public static void passTime() {
+        System.out.println("How many days would you like to pass?");
+        Scanner scan = new Scanner(System.in);
+        int input = scan.nextInt();
+        int future = day + input;
+        while (day < future) {
+            for (int n = 0; n < numPlants; n++) {
+                myPlantsInGarden[n].passDay();
+                if(!myPlantsInGarden[n].getIsAlive()){
+                    myPlantsInGarden[n] = null;
+                    System.out.println(myPlantsInGarden[n].getName()
+                    + " is dead!");
+                } else {
+                    System.out.println(myPlantsInGarden[n].getName() 
+                    + " is alive and kickin'!");
+                }
+            }//close for loop
+            day++;
+        }//close while loop
     }//close passTime method
 
-    public void checkGardenStatus() {
+    public static void checkGardenStatus() {
         System.out.println("* * * GARDEN STATUS * * *");
-        for(int n = 0; n < numPlants; n++){
-            String type; 
-            if(myPlantsInGarden[n].getFlowerType() && !myPlantsInGarden[n].getTreeType()){
-                type = "tree";
-            } else {
-                type = "flower";
+        for (int n = 0; n < numPlants; n++) {
+            int x = n + 1;
+            System.out.println(x + ". " + myPlantsInGarden[n].getName());
+            if (myPlantsInGarden[n] == null) {
+                System.out.println("This plant has died =( ");
+                System.out.println("Be sure to erase the painful memories of death by planting a new plant in "
+                        + myPlantsInGarden[n].getName() + "'s stead!");
             }
-            System.out.println(Integer.toString(n + 1)  
-                    + ". " + myPlantsInGarden[n].getName()
-                    + "/pType..........................." + type
-                    + "/pHieght........................." + myPlantsInGarden[n].getHeight() + "cm"
-                    + "/p");
-        }
+            System.out.println("Type........................" + myPlantsInGarden[n].getTypeString()
+                    + "\nHieght......................" + myPlantsInGarden[n].getHeight() + "cm"
+                    + "\nH2O........................." + myPlantsInGarden[n].getH2O()
+                    + "\nCO2........................." + myPlantsInGarden[n].getCO2()
+                    + "\nLight......................." + myPlantsInGarden[n].getLight()
+                    + "\n____________________________");
+        }//close for loop
     }//close checkGardenStatus method
-
-    public static void gardenStatus(Plant plant1, Plant plant2, Plant plant3) {
-        plant1.checkNutrientLevels();
-        plant2.checkNutrientLevels();
-        plant3.checkNutrientLevels();
-    }//close method
-
-    public static void timeForAll(int input, Plant plant1, Plant plant2,
-            Plant plant3) {
-        passTime(input, plant1);
-        printPlantHeight(plant1);
-        passTime(input, plant2);
-        printPlantHeight(plant2);
-        passTime(input, plant3);
-        printPlantHeight(plant3);
-    }//close method
-
-    public static void passTime(int passTime, Plant plant) {
-        int futureDay = day + passTime;
-        while (day < futureDay) {
-            day = day + 1;
-            plant.passDay();
-        }
-    }//close method
-
-    public static void printPlantHeight(Plant plant1) {
-        System.out.println(plant1.getName() + " is " + plant1.getHeight() + "CM tall");
-    }//close method
 }//close class
